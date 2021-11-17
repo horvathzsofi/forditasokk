@@ -1,16 +1,16 @@
 <?php
-require_once'../altalanos/konfig.php';
+require_once '../altalanos/konfig.php';
 include_once '../altalanos/fejlec.php';
-if(isset($_SESSION['felhasznalonev']) && isset($_SESSION['id_felhasznalo'])){
-    $id_felhasznalo=$_SESSION['id_felhasznalo'];
+if (isset($_SESSION['felhasznalonev']) && isset($_SESSION['id_felhasznalo'])) {
+  $id_felhasznalo = $_SESSION['id_felhasznalo'];
 ?>
-<div class="tartalom">
+  <div class="tartalom">
     <div class="focim">
-        <h2>Fordításaim</h2>
+      <h2>Fordításaim</h2>
     </div>
     <?php
 
-    $forditas_lekerdezes="SELECT
+    $forditas_lekerdezes = "SELECT
                         forditasok.*,
                         felhasznalok.felhasznalonev,
                         felhasznalok.ID_felhasznalo,
@@ -31,42 +31,44 @@ if(isset($_SESSION['felhasznalonev']) && isset($_SESSION['id_felhasznalo'])){
                           ON forditasok.zene_ID = zeneszamok.ID_zenek
                         LEFT JOIN felhasznalok
                           ON forditasok.felhasznalo_ID = felhasznalok.ID_felhasznalo
-                        WHERE felhasznalo_ID = ". $id_felhasznalo;
-    $lekerdezes=$adatbazisom->query($forditas_lekerdezes);
-    $eredmeny=$lekerdezes->fetchAll(PDO::FETCH_ASSOC);
-    if(count($eredmeny)>0){
-        ?>
-          <div class='kartyak'>  
+                        WHERE felhasznalo_ID = " . $id_felhasznalo;
+    $lekerdezes = $adatbazisom->query($forditas_lekerdezes);
+    $eredmeny = $lekerdezes->fetchAll(PDO::FETCH_ASSOC);
+    if (count($eredmeny) > 0) {
+    ?>
+      <div class='kartyak'>
         <?php
         foreach ($eredmeny as $adatsor) {
-            ?>
-                <div class="uj_kartya">
-                    <?php echo "<img  class='kep' src='../" . $adatsor['borito'] . "'>"; ?>
-                    <div class="kartya_cim"><?php echo $adatsor['zene_cim'] ?></div>
-                    <div class="kartya_alcim"><?php echo $adatsor['eloado_neve']; ?></div>
-                    <div class="lehetoseg">
-                        <?php
-                            echo "<a href='forditasom_szerkesztese.php?ID_zenek=".$adatsor['ID_zenek']."'>Szerkeszt</a>";
-                            echo "|";
-                            echo "<a href=''>Töröl</a>";
-                        ?>
-                    </div>
-                </div>
-            <?php
+        ?>
+          <div class="uj_kartya">
+            <?php echo "<img  class='kep' src='../" . $adatsor['borito'] . "'>"; ?>
+            <div class="kartya_cim"><?php echo $adatsor['zene_cim'] ?></div>
+            <div class="kartya_alcim"><?php echo $adatsor['eloado_neve']; ?></div>
+            <div class="lehetoseg">
+              <?php
+              echo "<a href='forditasom_szerkesztese.php?ID_zenek=" . $adatsor['ID_zenek'] . "'>Szerkeszt</a>";
+              echo "|";
+              echo "<a href=''>Töröl</a>";
+              ?>
+            </div>
+          </div>
+        <?php
         }
         ?>
-        </div>
-        <?php
-    }else{
-        echo "<p class='focim'>Még nem adtál hozzá fordítást!</p>";
+      </div>
+    <?php
+    } else {
+      echo "<p class='focim'>Még nem adtál hozzá fordítást!</p>";
     }
 
-?>
-</div>
+    ?>
+  </div>
 <?php
-}else{
+} else {
 ?>
-    <script>location.href = "http://localhost/forditasokk/kezdolap.php"</script>
+  <script>
+    location.href = "../index.php"
+  </script>
 <?php
 }
 include_once '../altalanos/lablec.php';

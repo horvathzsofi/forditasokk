@@ -9,24 +9,24 @@
         
         </button>
         <div id="legordulo_lista1">
-        <a href="http://localhost/forditasokk/felhasznalo/forditasaim.php">Fordításaim</a>
+        <a href="../felhasznalo/forditasaim.php">Fordításaim</a>
 
         <?php
         if ($_SESSION['tipus'] == 'Rendszergazda' || $_SESSION['tipus'] == 'Admin') {
             ?>
-            <a href="http://localhost/forditasokk/admin/eloadok/eloadok_kezelese.php">Előadók kezelése</a>
-            <a href="http://localhost/forditasokk/admin/albumok/albumok_kezelese.php">Albumok kezelése</a>
-            <a href="http://localhost/forditasokk/admin/zenek_es_forditasok/zenek_es_forditasok_kezelese.php">Zenék és fordítások kezelése</a>
+            <a href="../admin/eloadok_kezelese.php">Előadók kezelése</a>
+            <a href="../admin/albumok_kezelese.php">Albumok kezelése</a>
+            <a href="../admin/zenek_es_forditasok_kezelese.php">Zenék és fordítások kezelése</a>
         <?php } //admin és rendszergazda jogosultsággaé rendelkezők menüjének lezárása   ?>       
 
         <?php if ($_SESSION['tipus'] == 'Rendszergazda') { ?>
-            <a href="http://localhost/forditasokk/rendszergazda/felhasznalok/felhasznalok_kezelese.php">Felhasználók kezelése</a>
+            <a href="../rendszergazda/felhasznalok/felhasznalok_kezelese.php">Felhasználók kezelése</a>
             
             <?php
         } //rendszergazda jogosultság menü lezárása
         ?>
             <div class="logout">
-            <a href="http://localhost/forditasokk/felhasznalo/kijelentkezes.php">Kijelentkezés</a>
+            <a href="../felhasznalo/kijelentkezes.php">Kijelentkezés</a>
             </div>
         </div>
             
@@ -35,9 +35,9 @@
     else {
         ?>
         <div class="login">
-        <a  href="http://localhost/forditasokk/felhasznalo/bejelentkezes.php">Bejelentkezés</a>
+        <a  href="../felhasznalo/bejelentkezes.php">Bejelentkezés</a>
         
-        <a href="http://localhost/forditasokk/felhasznalo/regisztracio.php">Regisztráció</a>
+        <a href="../felhasznalo/regisztracio.php">Regisztráció</a>
         </div>
     <?php
 } //else ág lezárása

@@ -2,8 +2,8 @@
 
 /* Adatbázis hitelesítő adatok. */
 define('DB_SERVER', 'localhost'); /* Az adatbázis localhoston fut*/
-define('DB_USERNAME', 'root'); 
-define('DB_PASSWORD', ''); /* nincs jelszóval védve*/
+define('DB_USERNAME', 'forditasokk'); 
+define('DB_PASSWORD', 'DemoForditasokK'); /* nincs jelszóval védve*/
 define('DB_NAME', 'forditasokk'); /*nevet később módosítani kell*/
  
 /* Kapcsolódás a adatbázishoz - UTF-8 erőltetésével  */
@@ -15,5 +15,3 @@ try{
 } catch(PDOException $kivetel){
     die("Hiba: A kapcsolódás nem lehetséges!" . $kivetel->getMessage());
 }
-
-?>

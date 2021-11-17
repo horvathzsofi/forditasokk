@@ -1,11 +1,10 @@
-
-<?php 
+<?php
 include_once 'oldalsav.php';
 
-    
-    echo"</div>";
+echo "</div>";
 
 ?>
-<script src="/forditasokk/csatolmanyok/css_kezeles.js" type="text/javascript"></script>
+<script src="../csatolmanyok/css_kezeles.js" type="text/javascript"></script>
 </body>
+
 </html>

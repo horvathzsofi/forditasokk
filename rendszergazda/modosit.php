@@ -1,13 +1,13 @@
 <?php
-require_once'../../altalanos/konfig.php';
-include_once '../../altalanos/fejlec.php'; //fejléc beszúrása
-include_once '../../altalanos/menu.php'; //navigációs sáv beszúrása
+require_once '../altalanos/konfig.php';
+include_once '../altalanos/fejlec.php'; //fejléc beszúrása
+// include_once '../../altalanos/menu.php'; //navigációs sáv beszúrása
 
 if (isset($_SESSION['felhasznalonev']) && $_SESSION['tipus'] == 'Rendszergazda') {   //csak akkor megy tovább ha a bejelentkezett felhasználó
     //redndszergazda jogosultsággal rendelkezik
     $id = $felhasznalo = $tipusa = $aktiv_e = "";
     if (isset($_GET['ID_felhasznalo']) && !empty(trim($_GET['ID_felhasznalo']))) {  //akkor tölt be ha van egy ID aminek az adatait megjelenítse
-    //ha nincs akkor átirányít egy nem található tartalom oldalra
+        //ha nincs akkor átirányít egy nem található tartalom oldalra
         $id = trim($_GET['ID_felhasznalo']);
 
         $utasitas = $adatbazisom->prepare("SELECT ID_felhasznalo, felhasznalonev, tipus, aktiv
@@ -26,17 +26,21 @@ if (isset($_SESSION['felhasznalonev']) && $_SESSION['tipus'] == 'Rendszergazda')
                     $id = $adatsor['ID_felhasznalo'];
                 }
             } else {
-                ?>
-                <script>location.href = "http://localhost/forditasokk/altalanos/nem_talalhato.php";</script>
-                <?php
+?>
+                <script>
+                    location.href = "../altalanos/nem_talalhato.php";
+                </script>
+        <?php
                 exit();
             }
-        } 
-    }  else {
-    ?>
-    <script>location.href = "../../altalanos/hiba.php"</script>
+        }
+    } else {
+        ?>
+        <script>
+            location.href = "../altalanos/hiba.php"
+        </script>
     <?php
-}
+    }
     unset($eredmeny);
 
     if (isset($_POST['frissit'])) {
@@ -59,21 +63,21 @@ if (isset($_SESSION['felhasznalonev']) && $_SESSION['tipus'] == 'Rendszergazda')
         }
     }
 
-?>
-<div class="tartalom">
-    <div class="focim">
-        <h2>Felhasználó adatainak módosítása</h2>
-    </div>
-    
-    <form method="POST" class="minden_form">
-        <div>
-            <label> Felhasználó neve</label> <br>
-            <input type="text" name="felhasznalonev" value="<?php echo $felhasznalo; ?>" readonly>
+    ?>
+    <div class="tartalom">
+        <div class="focim">
+            <h2>Felhasználó adatainak módosítása</h2>
         </div>
-        <div>
-            <label> Típusa </label> <br>
-            <select name="jogosultsag">
-                <?php
+
+        <form method="POST" class="minden_form">
+            <div>
+                <label> Felhasználó neve</label> <br>
+                <input type="text" name="felhasznalonev" value="<?php echo $felhasznalo; ?>" readonly>
+            </div>
+            <div>
+                <label> Típusa </label> <br>
+                <select name="jogosultsag">
+                    <?php
                     if ($tipusa == "Rendszergazda") {
                         echo "<option selected>" . $tipusa . "</option>";
                     } else {
@@ -89,36 +93,38 @@ if (isset($_SESSION['felhasznalonev']) && $_SESSION['tipus'] == 'Rendszergazda')
                     } else {
                         echo "<option>Felhasználó</option>";
                     }
-                ?>
-            </select>
-        </div>
-        <div>
-            <label> Aktivált fiók </label> <br>
-            <select name="aktiv_e">
-                <?php
-                if ($aktiv_e == 1) {
-                    echo "<option value=1 selected>IGEN</option>";
-                } else {
-                    echo "<option value=1>IGEN</option>";
-                }
-                if ($aktiv_e == 0) {
-                    echo "<option value=0 selected>NEM</option>";
-                } else {
-                    echo "<option value=0 >NEM</option>";
-                }
-                ?>
-            </select>
-        </div>
-        <input type="hidden" name="id" value="<?php echo $id; ?>"/>
-       
-        <button type="submit" class="gomb" name="frissit">Adatok frissítése</button>
-    </form>
-</div>
+                    ?>
+                </select>
+            </div>
+            <div>
+                <label> Aktivált fiók </label> <br>
+                <select name="aktiv_e">
+                    <?php
+                    if ($aktiv_e == 1) {
+                        echo "<option value=1 selected>IGEN</option>";
+                    } else {
+                        echo "<option value=1>IGEN</option>";
+                    }
+                    if ($aktiv_e == 0) {
+                        echo "<option value=0 selected>NEM</option>";
+                    } else {
+                        echo "<option value=0 >NEM</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <input type="hidden" name="id" value="<?php echo $id; ?>" />
+
+            <button type="submit" class="gomb" name="frissit">Adatok frissítése</button>
+        </form>
+    </div>
 <?php
-              } else{
+} else {
 ?>
-    <script>location.href="http://localhost/forditasokk/kezdolap.php"</script>
+    <script>
+        location.href = "../index.php"
+    </script>
 <?php
 }
-include_once '../../altalanos/lablec.php';
+include_once '../altalanos/lablec.php';
 ?>

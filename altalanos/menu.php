@@ -3,11 +3,11 @@ session_start();
 ?>
 <div class="menu">
     <div class="logo">
-        <a href="http://localhost/forditasokk/kezdolap.php">
-            <img id="logo_kep" src="http://localhost/forditasokk/altalanos/kepek/asdasd.png" >
+        <a href="../index.php">
+            <img id="logo_kep" src="/altalanos/kepek/asdasd.png" >
         </a>
 
-        <form method="GET" id="kereses" name="kereses" action="http://localhost/forditasokk/altalanos/kereses_eredmenye.php">
+        <form method="GET" id="kereses" name="kereses" action="/altalanos/kereses_eredmenye.php">
             
                 <input class="keres" id="keres" type="text" name="keres" placeholder="Keresés...">
                 <button class="keres" id="kereso" type="submit" name="kereses" >Keresés</button>
@@ -21,12 +21,12 @@ session_start();
     </button>
 <nav>
     <div id="legordulo_lista">
-        <a href="http://localhost/forditasokk/kezdolap.php">Kezdőlap</a>
-        <a href="http://localhost/forditasokk/albumok/albumok.php">Albumok</a> 
-        <a href="http://localhost/forditasokk/eloadok/eloadok.php">Előadók</a> 
-        <a href="http://localhost/forditasokk/zenek/zenek.php">Zenék</a>
-        <a href="http://localhost/forditasokk/forditasok/forditasok.php">Fordítások</a>
-        <a href="http://localhost/forditasokk/kiadok/kiadok.php">Kiadók</a>
+        <a href="/index.php">Kezdőlap</a>
+        <a href="/albumok/albumok.php">Albumok</a> 
+        <a href="/eloadok/eloadok.php">Előadók</a> 
+        <a href="/zenek/zenek.php">Zenék</a>
+        <a href="/forditasok/forditasok.php">Fordítások</a>
+        <a href="/kiadok/kiadok.php">Kiadók</a>
     </div>
 </nav>
 

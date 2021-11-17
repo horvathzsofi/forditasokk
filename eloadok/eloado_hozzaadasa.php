@@ -1,11 +1,11 @@
 <?php
-require_once'../altalanos/konfig.php';  // konfig.php tartalmának beszúrása
+require_once '../altalanos/konfig.php';  // konfig.php tartalmának beszúrása
 include_once '../altalanos/fejlec.php'; //fejléc beszúrása
 
 if (isset($_SESSION['felhasznalonev'])) {
     $profil = "altalanos/kepek/artist.png";
-    $hiba=$uzenet=false;
-    $hiba_uzenet='';
+    $hiba = $uzenet = false;
+    $hiba_uzenet = '';
     $id_kiado = $kiado_nev = '';
     $debut = $debut_hiba = '';
     $eloado = $kiado = $rajongok = $yt = $twt = $face = $insta = '';
@@ -47,55 +47,48 @@ if (isset($_SESSION['felhasznalonev'])) {
         }
 
         if (!empty($_POST["youtube"])) {
-        $bevitt_youtube = htmlspecialchars(trim($_POST["youtube"]));
-        if (!filter_var($bevitt_youtube, FILTER_VALIDATE_URL)) {
-            $yt_hiba = "Nem megfelelő formátumú hivatkozás!";
-        } elseif (!strpos($bevitt_youtube, 'youtube.com')) {
-            $yt_hiba = "Nem megfelelő hivatkozás";
+            $bevitt_youtube = htmlspecialchars(trim($_POST["youtube"]));
+            if (!filter_var($bevitt_youtube, FILTER_VALIDATE_URL)) {
+                $yt_hiba = "Nem megfelelő formátumú hivatkozás!";
+            } elseif (!strpos($bevitt_youtube, 'youtube.com')) {
+                $yt_hiba = "Nem megfelelő hivatkozás";
+            } else {
+                $yt = $bevitt_youtube;
+            }
         }
-        else {
-            $yt = $bevitt_youtube;
-        }
-    }
 
-    if (!empty($_POST["facebook"])) {
-        $bevitt_facebook = htmlspecialchars(trim($_POST["facebook"]));
-        if (!filter_var($bevitt_facebook, FILTER_VALIDATE_URL)) {
-            $face_hiba = "Nem megfelelő formátumú hivatkozás!";
+        if (!empty($_POST["facebook"])) {
+            $bevitt_facebook = htmlspecialchars(trim($_POST["facebook"]));
+            if (!filter_var($bevitt_facebook, FILTER_VALIDATE_URL)) {
+                $face_hiba = "Nem megfelelő formátumú hivatkozás!";
+            } elseif (!strpos($bevitt_facebook, 'facebook.com')) {
+                $face_hiba = "Nem megfelelő hivatkozás";
+            } else {
+                $face = $bevitt_facebook;
+            }
         }
-        elseif (!strpos($bevitt_facebook, 'facebook.com')) {
-            $face_hiba = "Nem megfelelő hivatkozás";
-        }
-        else {
-            $face = $bevitt_facebook;
-        }
-    }
 
-    if (!empty($_POST["twitter"])) {
-        $bevitt_twitter = htmlspecialchars(trim($_POST["twitter"]));
-        if (!filter_var($bevitt_twitter, FILTER_VALIDATE_URL)) {
-            $twt_hiba = "Nem megfelelő formátumú hivatkozás!";
+        if (!empty($_POST["twitter"])) {
+            $bevitt_twitter = htmlspecialchars(trim($_POST["twitter"]));
+            if (!filter_var($bevitt_twitter, FILTER_VALIDATE_URL)) {
+                $twt_hiba = "Nem megfelelő formátumú hivatkozás!";
+            } elseif (!strpos($bevitt_twitter, 'twitter.com')) {
+                $twt_hiba = "Nem megfelelő hivatkozás";
+            } else {
+                $twt = $bevitt_twitter;
+            }
         }
-        elseif (!strpos($bevitt_twitter, 'twitter.com')) {
-            $twt_hiba = "Nem megfelelő hivatkozás";
-        }
-        else {
-            $twt = $bevitt_twitter;
-        }
-    }
 
-    if (!empty($_POST["instagram"])) {
-        $bevitt_instagram = htmlspecialchars(trim($_POST["instagram"]));
-        if (!filter_var($bevitt_instagram, FILTER_VALIDATE_URL)) {
-            $insta_hiba = "Nem megfelelő formátumú hivatkozás!";
+        if (!empty($_POST["instagram"])) {
+            $bevitt_instagram = htmlspecialchars(trim($_POST["instagram"]));
+            if (!filter_var($bevitt_instagram, FILTER_VALIDATE_URL)) {
+                $insta_hiba = "Nem megfelelő formátumú hivatkozás!";
+            } elseif (!strpos($bevitt_instagram, 'instagram.com')) {
+                $insta_hiba = "Nem megfelelő hivatkozás";
+            } else {
+                $insta = $bevitt_instagram;
+            }
         }
-        elseif (!strpos($bevitt_instagram, 'instagram.com')) {
-            $insta_hiba = "Nem megfelelő hivatkozás";
-        }
-        else {
-            $insta = $bevitt_instagram;
-        }
-    }
 
         if (empty($eloado_hiba) && empty($kiado_hiba) && empty($debut_hiba) && empty($rajongok_hiba) && empty($yt_hiba) && empty($face_hiba) && empty($twt_hiba) && empty($insta_hiba)) {
             $kiado_keres = "SELECT kiadok.ID_kiado, kiadok.kiado_neve
@@ -124,8 +117,8 @@ if (isset($_SESSION['felhasznalonev'])) {
             $utasitas_eloado = $adatbazisom->query($eloado_keres);
             $eloado_eredmeny = $utasitas_eloado->fetchAll(PDO::FETCH_ASSOC);
             if (count($eloado_eredmeny) > 0) {
-                $hiba_uzenet='';
-                $hiba=$uzenet=true;
+                $hiba_uzenet = '';
+                $hiba = $uzenet = true;
                 $hiba_uzenet = "Az előadót már hozzáadták.";
             } else {
 
@@ -141,7 +134,7 @@ if (isset($_SESSION['felhasznalonev'])) {
                 $utasitas->bindParam(':twt', $twt);
                 $utasitas->bindParam(':insta', $insta);
                 if ($utasitas->execute()) {
-                    header("location: ../eloadok/eloadok.php");
+                    header("location: eloadok.php");
                     exit();
                 } else {
                     echo "Valami hiba történt.";
@@ -149,29 +142,29 @@ if (isset($_SESSION['felhasznalonev'])) {
             }
         }
     }
-    ?>
-   
+?>
+
     <div class="tartalom">
-            <?php if($uzenet==true){?>
-    <div class="uzenet_van">
-        <?php
-            if($hiba){
-                echo "<div class='hiba_uzi'>".$hiba_uzenet."</div>";
-                $hiba_uzenet='';
-                $uzenet=false;
-            }
-        ?>
-    </div>
+        <?php if ($uzenet == true) { ?>
+            <div class="uzenet_van">
+                <?php
+                if ($hiba) {
+                    echo "<div class='hiba_uzi'>" . $hiba_uzenet . "</div>";
+                    $hiba_uzenet = '';
+                    $uzenet = false;
+                }
+                ?>
+            </div>
         <?php
         }
-    ?>
-    <div class="focim">
-        <h2>Előadó hozzáadása</h2>
-    </div>
+        ?>
+        <div class="focim">
+            <h2>Előadó hozzáadása</h2>
+        </div>
         <form class="eloado_hozzaad minden_form" method="POST">
-            <div <?php echo (!empty($eloado_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke1" >
+            <div <?php echo (!empty($eloado_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke1">
                 <label>Előadó neve*</label><br>
-                <input type="text" id="eloado" name="eloado" required  value="<?php echo $eloado; ?>">
+                <input type="text" id="eloado" name="eloado" required value="<?php echo $eloado; ?>">
                 <span class="hiba"><?php echo $eloado_hiba; ?></span>
             </div>
 
@@ -181,37 +174,37 @@ if (isset($_SESSION['felhasznalonev'])) {
                 <span class="hiba"><?php echo $debut_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($kiado_hiba)) ? 'Hiba történt!' : ''; ?>  class="cimke1" >
+            <div <?php echo (!empty($kiado_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke1">
                 <label>Kiadó neve*</label><br>
-                <input type="text" id="kiado" name="kiado" required value="<?php echo $kiado; ?>" >
+                <input type="text" id="kiado" name="kiado" required value="<?php echo $kiado; ?>">
                 <span class="hiba"><?php echo $kiado_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($rajongok_hiba)) ? 'Hiba történt!' : ''; ?>  class="cimke2">
+            <div <?php echo (!empty($rajongok_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke2">
                 <label>Rajongótábor neve</label><br>
                 <input type="text" id="rajongok" name="rajongok" value="<?php echo $rajongok; ?>">
                 <span class="hiba"><?php echo $rajongok_hiba; ?></span>
             </div>
             <hr class="vonal">
-            <div <?php echo (!empty($yt_hiba)) ? 'Hiba történt!' : ''; ?>  class="cimke1">
+            <div <?php echo (!empty($yt_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke1">
                 <label>Hivatalos YouTube csatorna</label><br>
                 <input type="text" id="youtube" name="youtube" value="<?php echo $yt; ?>">
                 <span class="hiba"><?php echo $yt_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($face_hiba)) ? 'Hiba történt!' : ''; ?>   class="cimke2">
+            <div <?php echo (!empty($face_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke2">
                 <label>Hivatalos facebook oldal</label><br>
                 <input type="text" id="facebook" name="facebook" value="<?php echo $face; ?>">
                 <span class="hiba"><?php echo $face_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($twt_hiba)) ? 'Hiba történt!' : ''; ?>   class="cimke1">
+            <div <?php echo (!empty($twt_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke1">
                 <label>Hivatalos twitter fiók</label><br>
                 <input type="text" id="twitter" name="twitter" value="<?php echo $twt; ?>">
                 <span class="hiba"><?php echo $twt_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($insta_hiba)) ? 'Hiba történt!' : ''; ?>   class="cimke2">
+            <div <?php echo (!empty($insta_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke2">
                 <label>Hivatalos Instagram fiók</label><br>
                 <input type="text" id="instagram" name="instagram" value="<?php echo $insta; ?>">
                 <span class="hiba"><?php echo $insta_hiba; ?></span>
@@ -221,11 +214,13 @@ if (isset($_SESSION['felhasznalonev'])) {
             <p class="link vissza_link"><a href="eloadok.php">Vissza az előadókhoz</a></p>
         </form>
     </div>
-    <?php
+<?php
 } else {
-    ?>
-    <script>location.href = "http://localhost/forditasokk/kezdolap.php"</script>
-    <?php
+?>
+    <script>
+        location.href = "../index.php"
+    </script>
+<?php
 }
 include_once '../altalanos/lablec.php';
 ?>

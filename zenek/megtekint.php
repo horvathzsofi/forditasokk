@@ -1,18 +1,17 @@
-
 <?php
-require_once'../altalanos/konfig.php';
+require_once '../altalanos/konfig.php';
 include_once '../altalanos/fejlec.php';
-if(isset($_SESSION['felhasznalonev'])){
-    $id_felhasznalo=$_SESSION['id_felhasznalo'];
-}else{
-    $id_felhasznalo='';
+if (isset($_SESSION['felhasznalonev'])) {
+    $id_felhasznalo = $_SESSION['id_felhasznalo'];
+} else {
+    $id_felhasznalo = '';
 }
-$hozzaadott=false; //ellenőrizni hogy a felhasználó már adott e hozzá fordítást
+$hozzaadott = false; //ellenőrizni hogy a felhasználó már adott e hozzá fordítást
 
 // A további feldolgozás előtt az id paraméter meglétének ellenőrzése
 if (isset($_GET['ID_zenek']) && !empty(trim($_GET['ID_zenek']))) {
     $id_zene = htmlspecialchars(trim($_GET["ID_zenek"]));
-    
+
     try {
         $lekerdezes = "SELECT
                     zeneszamok.*, albumok.*, eloadok.*, kiadok.*, forditasok.*,
@@ -38,12 +37,12 @@ if (isset($_GET['ID_zenek']) && !empty(trim($_GET['ID_zenek']))) {
         if (count($eredmeny) > 0) {
             foreach ($eredmeny as $adat) {
                 //album borítóképe
-                if(!empty($adat['ID_album'])){
-                    $id_album=$adat['ID_album'];
+                if (!empty($adat['ID_album'])) {
+                    $id_album = $adat['ID_album'];
                     $borito = $adat["borito"];
                     $album = $adat["album_cime"];
-                }else{
-                    $id_album='';
+                } else {
+                    $id_album = '';
                     $borito = $album = "N\A";
                 }
                 //album megjelenése
@@ -61,13 +60,13 @@ if (isset($_GET['ID_zenek']) && !empty(trim($_GET['ID_zenek']))) {
                 //dalszöveg
                 if (!empty($adat["dalszoveg"])) {
                     $dalszoveg = $adat["dalszoveg"];
-                    $nincs_szoveg=false;
+                    $nincs_szoveg = false;
                 } else {
                     $nincsszoveg = "Még nem érhető el dalszöveg";
                     $dalszoveg = "Dalszöveg hozzáadásához jelentkezz be!";
-                    $nincs_szoveg=true;
+                    $nincs_szoveg = true;
                     if (isset($_SESSION['felhasznalonev'])) {
-                        $dalszoveg = "<a href='http://localhost/forditasokk/zenek/zene_szerkeszt.php?ID_zenek=" . $id_zene . "'>Dalszöveg hozzáadása</a>";
+                        $dalszoveg = "<a href='zene_szerkeszt.php?ID_zenek=" . $id_zene . "'>Dalszöveg hozzáadása</a>";
                     }
                 }
                 //eloadó profilképe
@@ -79,10 +78,10 @@ if (isset($_GET['ID_zenek']) && !empty(trim($_GET['ID_zenek']))) {
                 //előadó
                 if (!empty($adat["eloado_neve"])) {
                     $eloado = $adat["eloado_neve"];
-                    $id_eloado=$adat["ID_eloado"];
+                    $id_eloado = $adat["ID_eloado"];
                 } else {
                     $eloado = "N/A";
-                    $id_eloado='';
+                    $id_eloado = '';
                 }
                 //debüt  idő
                 if (!empty($adat["debut_ido"])) {
@@ -93,10 +92,10 @@ if (isset($_GET['ID_zenek']) && !empty(trim($_GET['ID_zenek']))) {
                 //kiadó
                 if (!empty($adat["kiado_neve"])) {
                     $kiado = $adat["kiado_neve"];
-                    $id_kiado=$adat["ID_kiado"];
+                    $id_kiado = $adat["ID_kiado"];
                 } else {
                     $kiado = '"N\A"';
-                    $id_kiado='';
+                    $id_kiado = '';
                 }
                 //fanclub név meglétének ellenőrzése
                 if ($adat["fan_club"] != null) {   //ha van rajongóitábor név hozzárendeli
@@ -104,54 +103,57 @@ if (isset($_GET['ID_zenek']) && !empty(trim($_GET['ID_zenek']))) {
                 } else {
                     $fanclub = "N/A";  //ha nincs akkor kiírja hogy nincs adat
                 }
-                if(!empty($adat['dal_forditott_cime'])){
-                    $elerheto_forditas=true;
-                    $forditott_cim=$adat['dal_forditott_cime'];
-                    $forditas=$adat['forditas'];
-                }else{
-                    $elerheto_forditas=false;
-                    $forditott_cim='Még nem érhető el fordítás';
-                    $forditas='Fordítás hozzáadásához jelentkezz be!';
+                if (!empty($adat['dal_forditott_cime'])) {
+                    $elerheto_forditas = true;
+                    $forditott_cim = $adat['dal_forditott_cime'];
+                    $forditas = $adat['forditas'];
+                } else {
+                    $elerheto_forditas = false;
+                    $forditott_cim = 'Még nem érhető el fordítás';
+                    $forditas = 'Fordítás hozzáadásához jelentkezz be!';
                     if (isset($_SESSION['felhasznalonev'])) {
-                        $forditas = "<a href='http://localhost/forditasokk/forditasok/forditas_hozzaad.php?ID_zenek=" . $id_zene . "'>Fordítás hozzáadása</a>";
+                        $forditas = "<a href='../forditasok/forditas_hozzaad.php?ID_zenek=" . $id_zene . "'>Fordítás hozzáadása</a>";
                     }
                 }
-                if($adat['ID_felhasznalo']==$id_felhasznalo)
-                {
-                    $hozzaadott=true;
+                if ($adat['ID_felhasznalo'] == $id_felhasznalo) {
+                    $hozzaadott = true;
                 }
             }
         } else {
-            ?>
-            <script>location.href = "../altalanos/nem_talalhato.php"</script>
-            <?php
+?>
+            <script>
+                location.href = "../altalanos/nem_talalhato.php"
+            </script>
+    <?php
         }
     } catch (Exception $exc) {
         echo $exc->getMessage();
     }
 } else {
     ?>
-    <script>location.href = "../altalanos/hiba.php"</script>
-    <?php
+    <script>
+        location.href = "../altalanos/hiba.php"
+    </script>
+<?php
 }
 ?>
 
-<div  class="tartalom">
+<div class="tartalom">
     <div class="vissza_link">
         <a href="zenek.php">Vissza a zenékhez</a>
     </div>
     <div class='muvelet'>
-<?php
-if (isset($_SESSION['tipus']) == 'Rendszergazda' || isset($_SESSION['tipus']) == 'Admin' || isset($_SESSION['tipus']) == 'Felhasznalo') {
-    echo "<a href='zene_szerkeszt.php?ID_zenek=" . $id_zene . "'>Zene szerkesztése</a> <br>";
-    
-    if($hozzaadott==true){
-         echo "<a href='../felhasznalo/forditasom_szerkesztese.php?ID_zenek=" . $id_zene . "'>Fordításom szerkesztése</a>";
-    }else{
-        echo "<a href='../forditasok/forditas_hozzaad.php?ID_zenek=" . $id_zene . "'>Új fordítás hozzáadása</a>";
-    }
-}
-?>
+        <?php
+        if (isset($_SESSION['tipus']) == 'Rendszergazda' || isset($_SESSION['tipus']) == 'Admin' || isset($_SESSION['tipus']) == 'Felhasznalo') {
+            echo "<a href='zene_szerkeszt.php?ID_zenek=" . $id_zene . "'>Zene szerkesztése</a> <br>";
+
+            if ($hozzaadott == true) {
+                echo "<a href='../felhasznalo/forditasom_szerkesztese.php?ID_zenek=" . $id_zene . "'>Fordításom szerkesztése</a>";
+            } else {
+                echo "<a href='../forditasok/forditas_hozzaad.php?ID_zenek=" . $id_zene . "'>Új fordítás hozzáadása</a>";
+            }
+        }
+        ?>
     </div>
     <div class="osszegzes">
         <div class="info_sav_egy">
@@ -167,7 +169,7 @@ if (isset($_SESSION['tipus']) == 'Rendszergazda' || isset($_SESSION['tipus']) ==
                 <div class='cim'>Előadó:</div>
                 <div class='cimleiras'>
                     <?php
-                    echo " <a href='http://localhost/forditasokk/eloadok/megtekint.php?ID_eloado=" . $adat["ID_eloado"] . "'>";
+                    echo " <a href='../eloadok/megtekint.php?ID_eloado=" . $adat["ID_eloado"] . "'>";
                     echo $eloado;
                     echo "</a>";
                     ?>
@@ -175,7 +177,7 @@ if (isset($_SESSION['tipus']) == 'Rendszergazda' || isset($_SESSION['tipus']) ==
                 <div class='cim'>Album:</div>
                 <div class='cimleiras'>
                     <?php
-                    echo " <a href='http://localhost/forditasokk/albumok/megtekint.php?ID_album=" . $adat["ID_album"] . "'>";
+                    echo " <a href='../albumok/megtekint.php?ID_album=" . $adat["ID_album"] . "'>";
                     echo $album;
                     echo "</a>";
                     ?>
@@ -194,7 +196,7 @@ if (isset($_SESSION['tipus']) == 'Rendszergazda' || isset($_SESSION['tipus']) ==
                 <div class='cimsor'>
                     <h3>
                         <?php
-                        echo " <a href='http://localhost/forditasokk/eloadok/megtekint.php?ID_eloado=" . $adat["ID_eloado"] . "'>";
+                        echo " <a href='../eloadok/megtekint.php?ID_eloado=" . $adat["ID_eloado"] . "'>";
                         echo $eloado;
                         echo "</a>";
                         ?>
@@ -214,7 +216,7 @@ if (isset($_SESSION['tipus']) == 'Rendszergazda' || isset($_SESSION['tipus']) ==
                 <div class='cim'>Kiado:</div>
                 <div class='cimleiras'>
                     <?php
-                    echo "<a href='http://localhost/forditasokk/kiadok/megtekint.php?ID_kiado=" . $adat['ID_kiado'] . "'>";
+                    echo "<a href='../kiadok/megtekint.php?ID_kiado=" . $adat['ID_kiado'] . "'>";
                     echo $kiado;
                     echo "</a>";
                     ?>
@@ -222,103 +224,98 @@ if (isset($_SESSION['tipus']) == 'Rendszergazda' || isset($_SESSION['tipus']) ==
 
             </div>
             <div class="kep_ketto">
-                <?php echo"<img class='kep' src=../" . $profil . ">"; ?>
+                <?php echo "<img class='kep' src=../" . $profil . ">"; ?>
             </div>
         </div>
     </div>
-    
+
     <div class='dalszovegek'>
         <?php
-            if($elerheto_forditas){
+        if ($elerheto_forditas) {
         ?>
-        <div class='forditas fordito'> Fordította:
-            <form method="post" action="">
-                <input type='hidden' name='muvelet' value="modosit" >
-                <select name="forditok" onchange="this.form.submit()">
-                    <option selected disabled>Válassz fordítót</option>
+            <div class='forditas fordito'> Fordította:
+                <form method="post" action="">
+                    <input type='hidden' name='muvelet' value="modosit">
+                    <select name="forditok" onchange="this.form.submit()">
+                        <option selected disabled>Válassz fordítót</option>
                         <?php
                         foreach ($eredmeny as $adat2) {
-                            if ($_POST["forditok"] == $adat2["ID_felhasznalo"])
-                            {
+                            if ($_POST["forditok"] == $adat2["ID_felhasznalo"]) {
                                 echo "<option value='" . $adat2["ID_felhasznalo"] . "' selected>" . $adat2["felhasznalonev"] . "</option>";
                             } else {
                                 echo "<option value='" . $adat2["ID_felhasznalo"] . "'>" . $adat2["felhasznalonev"] . "</option>";
                             }
                         }
                         ?>
-                </select>
-            </form>
-        </div>
+                    </select>
+                </form>
+            </div>
         <?php
-            }else{
-                
+        } else {
+
+            echo "<div class='forditas'>";
+            echo "<h3>" . $forditott_cim . "</h3>";
+            echo $forditas;
+            echo "</div>";
+        }
+        ?>
+
+
+        <div class='zeneszoveg'>
+
+            <h3>
+                <?php
+                if ($nincs_szoveg) {
+                    echo $nincsszoveg;
+                } else {
+                    echo $zene;
+                }
+                ?>
+            </h3>
+
+
+            <?php echo nl2br($dalszoveg); ?>
+        </div>
+
+        <?php
+        if (isset($_POST["muvelet"]) && $_POST["muvelet"] == "modosit") {
+            $lekerdezes .= " AND felhasznalok.ID_felhasznalo = " . $_POST["forditok"] . ";";
+            $utasitas2 = $adatbazisom->query($lekerdezes);
+            $utasitas2->execute();
+            $eredmeny2 = $utasitas2->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($eredmeny2 as $adat2) {
+                $forditott_cim = $adat2["dal_forditott_cime"];
+                $forditas = $adat2["forditas"];
+                $fordito = $adat2["felhasznalonev"];
+            }
+            if (isset($adat2["dal_forditott_cime"]) && isset($forditas) && !empty($adat2["dal_forditott_cime"]) && !empty($forditas)) {
                 echo "<div class='forditas'>";
-                echo "<h3>".$forditott_cim."</h3>";
-                echo $forditas;
+                if (strlen($forditas) > 300) {
+                    if ($id_felhasznalo == $_POST['forditok']) {
+                        echo "<div>"
+                            . "<h3>" . $adat2["dal_forditott_cime"];
+        ?>
+                        <span class='szerkesztes'>
+                            <a href="<?php echo '../felhasznalo/forditasom_szerkesztese.php?ID_zenek=' . $id_zene; ?>" title='Szerkesztés' class='fas szerkesztes'>&#xf303;</a>
+                        </span>
+        <?php
+                        echo "</h3></div>";
+                    } else {
+                        echo "<div>"
+                            . "<h3>" . $adat2["dal_forditott_cime"] . "</h3>"
+                            . "</div>";
+                    }
+                    echo "<div>" . nl2br($forditas) . "</div>";
+                } else {
+                    echo "<div>"
+                        . "<h3 class='hiba'>Hibás tartalom.</h3>"
+                        . "</div>";
+                }
                 echo "</div>";
             }
+        }
         ?>
-                
-        
-            <div  class='zeneszoveg'>
-              
-                    <h3>
-                    <?php
-                    if($nincs_szoveg){
-                        echo $nincsszoveg;
-                    }
-                    else{
-                        echo $zene;
-                    }
-                    ?>
-                    </h3>
-         
-           
-                <?php echo nl2br($dalszoveg); ?>
-            </div>
-   
-<?php
-if (isset($_POST["muvelet"]) && $_POST["muvelet"] == "modosit") {
-    $lekerdezes .= " AND felhasznalok.ID_felhasznalo = " . $_POST["forditok"] . ";";
-    $utasitas2 = $adatbazisom->query($lekerdezes);
-    $utasitas2->execute();
-    $eredmeny2 = $utasitas2->fetchAll(PDO::FETCH_ASSOC);
-
-    foreach ($eredmeny2 as $adat2) {
-        $forditott_cim = $adat2["dal_forditott_cime"];
-        $forditas = $adat2["forditas"];
-        $fordito = $adat2["felhasznalonev"];
-    }
-    if (isset($adat2["dal_forditott_cime"]) && isset($forditas) && !empty($adat2["dal_forditott_cime"]) && !empty($forditas)) {
-        echo "<div class='forditas'>";
-        if(strlen($forditas)>300){
-        if($id_felhasznalo==$_POST['forditok']){
-            echo "<div>"
-                . "<h3>" . $adat2["dal_forditott_cime"];
-            ?>
-        <span class='szerkesztes'>
-            <a href="<?php echo '../felhasznalo/forditasom_szerkesztese.php?ID_zenek=' . $id_zene; ?>" title='Szerkesztés' class='fas szerkesztes'>&#xf303;</a>
-        </span>
-            <?php
-            echo "</h3></div>";
-        }else{
-            echo "<div>"
-                . "<h3>" . $adat2["dal_forditott_cime"] . "</h3>"
-                ."</div>";
-        }
-        echo "<div>" . nl2br($forditas) . "</div>";
-        }else {
-            echo "<div>"
-                ."<h3 class='hiba'>Hibás tartalom.</h3>"
-            ."</div>";
-        }
-        echo"</div>";
-    }
-}
-?>
-
-
-    
     </div>
 
 </div>

@@ -30,7 +30,7 @@ if (isset($_SESSION['felhasznalonev'])) {
             }
         } else {
             ?>
-            <script>location.href = "http://localhost/forditasokk/altalanos/nem_talalhato.php"</script>
+            <script>location.href = "../altalanos/nem_talalhato.php"</script>
             <?php
         }
         if (isset($_POST['album_szerkesztese'])) {
@@ -71,7 +71,7 @@ if (isset($_SESSION['felhasznalonev'])) {
         }
     } else {
         ?>
-        <script>location.href = "http://localhost/forditasokk/altalanos/hiba.php"</script>
+        <script>location.href = "../altalanos/hiba.php"</script>
         <?php
     }
     ?>
@@ -109,7 +109,7 @@ if (isset($_SESSION['felhasznalonev'])) {
     <?php
 } else {
     ?>
-    <script>location.href = "http://localhost/forditasokk/kezdolap.php"</script>
+    <script>location.href = "../index.php"</script>
     <?php
 }
 include_once '../altalanos/lablec.php';

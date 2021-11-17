@@ -1,15 +1,17 @@
 <?php
-require_once'../altalanos/konfig.php';
+require_once '../altalanos/konfig.php';
 include_once '../altalanos/fejlec.php';
 
 if (isset($_SESSION['felhasznalonev'])) {
-    ?>
-    <script>location.href = "../kezdolap.php"</script>
+?>
+    <script>
+        location.href = "../index.php"
+    </script>
     <?php
 } // ha van felhasználó bejelentkezés a kezdőlapra irányít   
-$hiba=$uzenet=false;
-$hiba_uzenet='';
-$siker_uzenet='';
+$hiba = $uzenet = false;
+$hiba_uzenet = '';
+$siker_uzenet = '';
 if (isset($_POST['bejelentkezes'])) {
     $felhasznalo_neve = $_POST['felhasznalonev'];
     $jsz = $_POST['jelszo'];
@@ -33,18 +35,20 @@ if (isset($_POST['bejelentkezes'])) {
                 $_SESSION['felhasznalonev'] = $felhasznalo;
                 $_SESSION['tipus'] = $tipusa;
                 $_SESSION['id_felhasznalo'] = $id_felhasznalo;
-                ?>
-                <script>location.href = "../kezdolap.php"</script>
+    ?>
+                <script>
+                    location.href = "../index.php"
+                </script>
 
-                <?php
+<?php
             } else {
-                $hiba_uzenet='';
-                $hiba=$uzenet=true;
+                $hiba_uzenet = '';
+                $hiba = $uzenet = true;
                 $hiba_uzenet = "A fiókot még nem aktiválták. Nyissa meg e-mail fiókját és kattintson az aktiválás linkjére.";
             }
         } else {
-            $hiba_uzenet='';
-            $hiba=$uzenet=true;
+            $hiba_uzenet = '';
+            $hiba = $uzenet = true;
             $hiba_uzenet = "Nem megfelelő felhasználónév vagy jelszó.";
         }
     } catch (Exception $exc) {
@@ -74,17 +78,17 @@ if (isset($_GET['email']) && !empty($_GET['email'])) {
             $utasitas->bindParam(2, $email);
             $utasitas->bindParam(3, $hash);
             if ($utasitas->execute()) {
-                $siker_uzenet='';
-                $uzenet=true;
-                $siker_uzenet= 'Aktiváltad fiókod, már be tudsz jelentkezni!';
+                $siker_uzenet = '';
+                $uzenet = true;
+                $siker_uzenet = 'Aktiváltad fiókod, már be tudsz jelentkezni!';
             } else {
-                $hiba_uzenet='';
-                $hiba=$uzenet=true;
+                $hiba_uzenet = '';
+                $hiba = $uzenet = true;
                 $hiba_uzenet = "Érvénytelen vagy már felhasznált aktiváló link!";
             }
         } else {
-            $hiba_uzenet='';
-            $hiba=$uzenet=true;
+            $hiba_uzenet = '';
+            $hiba = $uzenet = true;
             $hiba_uzenet = "Érvénytelen próbálkozás, kérjük használja az e-mailben elküldött linket!";
         }
     }
@@ -92,28 +96,28 @@ if (isset($_GET['email']) && !empty($_GET['email'])) {
 
 ?>
 <div class="tartalom">
-    <?php if($uzenet==true){?>
-    <div class="uzenet_van">
-        <?php
-            if($hiba){
-                echo "<div class='hiba_uzi'>".$hiba_uzenet."</div>";
-                $hiba_uzenet='';
-                $uzenet=false;
+    <?php if ($uzenet == true) { ?>
+        <div class="uzenet_van">
+            <?php
+            if ($hiba) {
+                echo "<div class='hiba_uzi'>" . $hiba_uzenet . "</div>";
+                $hiba_uzenet = '';
+                $uzenet = false;
             }
-            if(!$hiba){
-                echo "<div class='siker_uzi'>".$siker_uzenet."</div>";
-                $siker_uzenet='';
-                $uzenet=false;
+            if (!$hiba) {
+                echo "<div class='siker_uzi'>" . $siker_uzenet . "</div>";
+                $siker_uzenet = '';
+                $uzenet = false;
             }
-        ?>
-    </div>
-        <?php
-        }
+            ?>
+        </div>
+    <?php
+    }
     ?>
     <div class="focim">
         <h2>Bejelentkezés</h2>
     </div>
-    
+
     <form method="POST" class="minden_form">
         <div>
             <label for="felhasznalonev">Felhasználónév</label> <br>

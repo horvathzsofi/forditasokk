@@ -9,9 +9,9 @@ if (isset($_SESSION['felhasznalonev'])) {
     $eloado_hiba = $kiado_hiba = $rajongok_hiba = $yt_hiba = $twt_hiba = $face_hiba = $insta_hiba = '';
 
     if (isset($_GET['ID_eloado']) && !empty(trim($_GET['ID_eloado']))) {
-        $id_eloado= htmlspecialchars(trim($_GET['ID_eloado']));
+        $id_eloado = htmlspecialchars(trim($_GET['ID_eloado']));
 
-        $eloado_lekerdezes=$adatbazisom->prepare("SELECT
+        $eloado_lekerdezes = $adatbazisom->prepare("SELECT
                                                     kiadok.ID_kiado,
                                                     kiadok.kiado_neve,
                                                     eloadok.*
@@ -21,25 +21,26 @@ if (isset($_SESSION['felhasznalonev'])) {
                                                 WHERE ID_eloado=?");
         $eloado_lekerdezes->bindParam(1, $id_eloado);
         $eloado_lekerdezes->execute();
-        $eloado_eredmeny=$eloado_lekerdezes->fetchAll(PDO::FETCH_ASSOC);
-        if(count($eloado_eredmeny)>0){
+        $eloado_eredmeny = $eloado_lekerdezes->fetchAll(PDO::FETCH_ASSOC);
+        if (count($eloado_eredmeny) > 0) {
             foreach ($eloado_eredmeny as $adatsor) {
-                $eloado=$adatsor['eloado_neve'];
-                $kiado=$adatsor['kiado_neve'];
-                $id_kiado=$adatsor['ID_kiado'];
-                $debut=$adatsor['debut_ido'];
-                $rajongok=$adatsor['fan_club'];
+                $eloado = $adatsor['eloado_neve'];
+                $kiado = $adatsor['kiado_neve'];
+                $id_kiado = $adatsor['ID_kiado'];
+                $debut = $adatsor['debut_ido'];
+                $rajongok = $adatsor['fan_club'];
                 $yt = $adatsor['youtube'];
                 $face = $adatsor['facebook'];
                 $twt = $adatsor['twitter'];
                 $insta = $adatsor['instagram'];
-                
             }
-        }else{
-    ?>
-    <script>location.href = "http://localhost/forditasokk/altalanos/nem_talalhato.php"</script>
-    <?php
-    } 
+        } else {
+?>
+            <script>
+                location.href = "../altalanos/nem_talalhato.php"
+            </script>
+        <?php
+        }
 
 
         if (isset($_POST["eloado_szerkeszt"])) {
@@ -60,7 +61,7 @@ if (isset($_SESSION['felhasznalonev'])) {
             } else {
                 $kiado = $bevitt_kiado;
             }
-            
+
             if (!empty($_POST["rajongok"])) {
                 $bevitt_rajongok = htmlspecialchars(trim($_POST["rajongok"]));
                 if (!filter_var($bevitt_rajongok, FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/^[a-zA-Z0-9 ()]/")))) {
@@ -113,61 +114,62 @@ if (isset($_SESSION['felhasznalonev'])) {
                     $insta = $bevitt_instagram;
                 }
             }
-            
+
             if (empty($eloado_hiba) && empty($kiado_hiba) && empty($debut_hiba) && empty($rajongok_hiba) && empty($yt_hiba) && empty($face_hiba) && empty($twt_hiba) && empty($insta_hiba)) {
-            $kiado_keres = "SELECT kiadok.ID_kiado, kiadok.kiado_neve
+                $kiado_keres = "SELECT kiadok.ID_kiado, kiadok.kiado_neve
                     FROM kiadok
                     WHERE ";
-            $kiado_keres .= "kiado_neve LIKE '%" . $kiado . "%'";
-            $utasitas_kiado = $adatbazisom->query($kiado_keres);
-            $kiado_eredmeny = $utasitas_kiado->fetchAll(PDO::FETCH_ASSOC);
-            if (count($kiado_eredmeny) > 0) {
-                foreach ($kiado_eredmeny as $kiado_adatok) {
-                    $id_kiado = $kiado_adatok["ID_kiado"];
-                    $kiado_nev = $kiado_adatok["kiado_neve"];
+                $kiado_keres .= "kiado_neve LIKE '%" . $kiado . "%'";
+                $utasitas_kiado = $adatbazisom->query($kiado_keres);
+                $kiado_eredmeny = $utasitas_kiado->fetchAll(PDO::FETCH_ASSOC);
+                if (count($kiado_eredmeny) > 0) {
+                    foreach ($kiado_eredmeny as $kiado_adatok) {
+                        $id_kiado = $kiado_adatok["ID_kiado"];
+                        $kiado_nev = $kiado_adatok["kiado_neve"];
+                    }
+                } else {
+                    $kiado_hozzaad = $adatbazisom->prepare("INSERT INTO kiadok (kiado_neve) VALUES (:kiado)");
+                    $kiado_hozzaad->bindParam(':kiado', $bevitt_kiado);
+                    $kiado_hozzaad->execute();
+                    $id_kiado = $adatbazisom->lastInsertId();
                 }
-            } else {
-                $kiado_hozzaad = $adatbazisom->prepare("INSERT INTO kiadok (kiado_neve) VALUES (:kiado)");
-                $kiado_hozzaad->bindParam(':kiado', $bevitt_kiado);
-                $kiado_hozzaad->execute();
-                $id_kiado = $adatbazisom->lastInsertId();
-            }  
-                
-            $frissit = $adatbazisom->prepare("UPDATE eloadok SET debut_ido=?, kiado_ID=?, fan_club=?, youtube=?, facebook=?, twitter=?, instagram=?
+
+                $frissit = $adatbazisom->prepare("UPDATE eloadok SET debut_ido=?, kiado_ID=?, fan_club=?, youtube=?, facebook=?, twitter=?, instagram=?
                                             WHERE ID_eloado=?");
-            $frissit->bindParam(1, $debut);
-            $frissit->bindParam(2, $id_kiado);
-            $frissit->bindParam(3, $rajongok);
-            $frissit->bindParam(4, $yt);
-            $frissit->bindParam(5, $face);
-            $frissit->bindParam(6, $twt);
-            $frissit->bindParam(7, $insta);
-            $frissit->bindParam(8, $id_eloado);
-            
-            if ($frissit->execute()) {
-                header("location: eloadok.php");
-                exit();
-            } else {
-                echo "<p class='hiba'>Valami hiba történt</p>";
-            }
-            
+                $frissit->bindParam(1, $debut);
+                $frissit->bindParam(2, $id_kiado);
+                $frissit->bindParam(3, $rajongok);
+                $frissit->bindParam(4, $yt);
+                $frissit->bindParam(5, $face);
+                $frissit->bindParam(6, $twt);
+                $frissit->bindParam(7, $insta);
+                $frissit->bindParam(8, $id_eloado);
+
+                if ($frissit->execute()) {
+                    header("location: eloadok.php");
+                    exit();
+                } else {
+                    echo "<p class='hiba'>Valami hiba történt</p>";
+                }
             }
         }
     } else {
         ?>
-        <script>location.href = "http://localhost/forditasokk/altalanos/hiba.php"</script>
-        <?php
+        <script>
+            location.href = "../altalanos/hiba.php"
+        </script>
+    <?php
     }
-    ?> 
+    ?>
     <div class="tartalom">
         <div class="focim">
             <h2>Előadó szerkesztése</h2>
         </div>
 
         <form class="eloado_hozzaad minden_form" method="POST">
-            <div <?php echo (!empty($eloado_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke1" >
+            <div <?php echo (!empty($eloado_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke1">
                 <label>Előadó neve*</label><br>
-                <input type="text" id="eloado" name="eloado" required  value="<?php echo $eloado; ?>">
+                <input type="text" id="eloado" name="eloado" required value="<?php echo $eloado; ?>">
                 <span class="hiba"><?php echo $eloado_hiba; ?></span>
             </div>
 
@@ -177,37 +179,37 @@ if (isset($_SESSION['felhasznalonev'])) {
                 <span class="hiba"><?php echo $debut_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($kiado_hiba)) ? 'Hiba történt!' : ''; ?>  class="cimke1" >
+            <div <?php echo (!empty($kiado_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke1">
                 <label>Kiadó neve*</label><br>
-                <input type="text" id="kiado" name="kiado" required value="<?php echo $kiado; ?>" >
+                <input type="text" id="kiado" name="kiado" required value="<?php echo $kiado; ?>">
                 <span class="hiba"><?php echo $kiado_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($rajongok_hiba)) ? 'Hiba történt!' : ''; ?>  class="cimke2">
+            <div <?php echo (!empty($rajongok_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke2">
                 <label>Rajongótábor neve</label><br>
                 <input type="text" id="rajongok" name="rajongok" value="<?php echo $rajongok; ?>">
                 <span class="hiba"><?php echo $rajongok_hiba; ?></span>
             </div>
             <hr class="vonal">
-            <div <?php echo (!empty($yt_hiba)) ? 'Hiba történt!' : ''; ?>  class="cimke1">
+            <div <?php echo (!empty($yt_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke1">
                 <label>Hivatalos YouTube csatorna</label><br>
                 <input type="text" id="youtube" name="youtube" value="<?php echo $yt; ?>">
                 <span class="hiba"><?php echo $yt_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($face_hiba)) ? 'Hiba történt!' : ''; ?>   class="cimke2">
+            <div <?php echo (!empty($face_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke2">
                 <label>Hivatalos facebook oldal</label><br>
                 <input type="text" id="facebook" name="facebook" value="<?php echo $face; ?>">
                 <span class="hiba"><?php echo $face_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($twt_hiba)) ? 'Hiba történt!' : ''; ?>   class="cimke1">
+            <div <?php echo (!empty($twt_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke1">
                 <label>Hivatalos twitter fiók</label><br>
                 <input type="text" id="twitter" name="twitter" value="<?php echo $twt; ?>">
                 <span class="hiba"><?php echo $twt_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($insta_hiba)) ? 'Hiba történt!' : ''; ?>   class="cimke2">
+            <div <?php echo (!empty($insta_hiba)) ? 'Hiba történt!' : ''; ?> class="cimke2">
                 <label>Hivatalos Instagram fiók</label><br>
                 <input type="text" id="instagram" name="instagram" value="<?php echo $insta; ?>">
                 <span class="hiba"><?php echo $insta_hiba; ?></span>
@@ -217,12 +219,14 @@ if (isset($_SESSION['felhasznalonev'])) {
             <p class="link vissza_link"><a href="eloadok.php">Vissza az előadókhoz</a></p>
         </form>
 
-    </div>      
-    <?php
+    </div>
+<?php
 } else {
-    ?>
-    <script>location.href = "http://localhost/forditasokk/kezdolap.php"</script>
-    <?php
+?>
+    <script>
+        location.href = "../index.php"
+    </script>
+<?php
 }
 include_once '../altalanos/lablec.php';
 ?>

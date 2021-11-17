@@ -1,19 +1,19 @@
 <?php
-require_once'../altalanos/konfig.php';  // konfig.php tartalmának beszúrása
+require_once '../altalanos/konfig.php';  // konfig.php tartalmának beszúrása
 include_once '../altalanos/fejlec.php'; //fejléc beszúrása
 
 
 if (isset($_SESSION['felhasznalonev'])) {
 
 
-//változók létrehozása
+    //változók létrehozása
     $dal_cim = $eloado = $album = $dalszoveg = $yt = '';
-//hibaüzenet változói
+    //hibaüzenet változói
     $dal_cim_hiba = $eloado_hiba = $album_hiba = $dalszoveg_hiba = $yt_hiba = '';
     $focimdal = $focimdal_hiba = '';
-$hiba=$uzenet=false;
-$hiba_uzenet='';
-//A form elküldésekor ellenőrzi, hogy van e üres mező, hibát dob ha igen...
+    $hiba = $uzenet = false;
+    $hiba_uzenet = '';
+    //A form elküldésekor ellenőrzi, hogy van e üres mező, hibát dob ha igen...
     if (isset($_POST["zene_hozzaad"])) { //megnézi hogy POST kérést indítottak-e
         //bevitt értékek validálása
         if (isset($_POST["focimdal"]) && !empty(htmlspecialchars(trim($_POST["focimdal"])))) {
@@ -64,8 +64,7 @@ $hiba_uzenet='';
                 $yt_hiba = "Nem megfelelő formátumú hivatkozás!";
             } elseif (!strpos($bevitt_youtube, 'youtube.com')) {
                 $yt_hiba = "Nem megfelelő hivatkozás";
-            }
-            else {
+            } else {
                 $yt = $bevitt_youtube;
             }
         }
@@ -131,8 +130,8 @@ $hiba_uzenet='';
             $zene_eredmeny = $zene_utasitas->fetchAll(PDO::FETCH_ASSOC);
 
             if (count($zene_eredmeny) > 0) {
-                $hiba_uzenet='';
-                $hiba=$uzenet=true;
+                $hiba_uzenet = '';
+                $hiba = $uzenet = true;
                 $hiba_uzenet = "A zenét már hozzáadták!";
             } else {
                 if (empty($yt)) {
@@ -161,8 +160,8 @@ $hiba_uzenet='';
                 $kapcsolat_lekerdezes->bindParam(':id_album', $id_album);
                 $kapcsolat_lekerdezes->bindParam(':id_album', $id_zene);
                 if (count($kapcsolat_eredmeny) > 0) {
-                    $hiba_uzenet='';
-                    $hiba=$uzenet=true;
+                    $hiba_uzenet = '';
+                    $hiba = $uzenet = true;
                     $hiba_uzenet = "A zenét már hozzáadták!";
                 } else {
                     $osszakapcsol = $adatbazisom->prepare("INSERT INTO kapcsolo_zene_album_eloado (eloado_ID, album_ID, zene_ID, focimdal_e) VALUES (:eloado, :album, :zene, :focimdal)");
@@ -190,85 +189,87 @@ $hiba_uzenet='';
             }
         }
     }
-    ?>
+?>
     <div class="tartalom">
-        <?php if($uzenet==true){?>
-    <div class="uzenet_van">
-        <?php
-            if($hiba){
-                echo "<div class='hiba_uzi'>".$hiba_uzenet."</div>";
-                $hiba_uzenet='';
-                $uzenet=false;
-            }
-        ?>
-    </div>
+        <?php if ($uzenet == true) { ?>
+            <div class="uzenet_van">
+                <?php
+                if ($hiba) {
+                    echo "<div class='hiba_uzi'>" . $hiba_uzenet . "</div>";
+                    $hiba_uzenet = '';
+                    $uzenet = false;
+                }
+                ?>
+            </div>
         <?php
         }
-    ?>
-         <div class="focim">
+        ?>
+        <div class="focim">
             <h2>Zene hozzáadása</h2>
-         </div>
+        </div>
         <form class="zene_hozzaad minden_form" method="POST">
             <div class="cimke1">
-            <div <?php echo (!empty($eloado_hiba)) ? 'Hiba történt!' : ''; ?>>
-                <label>Előadó neve*</label> <br>
-                <input type="text" name="eloado" value="<?php echo $eloado; ?>">
-                <br>
-                <span class="hiba"><?php echo $eloado_hiba; ?></span>
-            </div>
-            <div <?php echo (!empty($album_hiba)) ? 'Hiba történt!' : ''; ?>>
-                <label>Album címe*</label> <br>
-                <input type="text"  name="album" value="<?php echo $album; ?>">
-                <br>
-                <span class="hiba"><?php echo $album_hiba; ?></span>
-            </div>
-
-            <div <?php echo (!empty($dal_cim_hiba)) ? 'Hiba történt!' : ''; ?>>
-                <label>Dal címe*</label> <br>
-                <input type="text"  name="dal_cim" value="<?php echo $dal_cim; ?>">
-                <br>
-                <span class="hiba"><?php echo $dal_cim_hiba; ?></span>
-            </div>
-
-            <div <?php echo (!empty($focimdal_hiba)) ? 'Hiba történt!' : ''; ?> >
-                <label>Főcímdal*</label> <br>
-                <div class="valaszto">
-                    <div>
-                        <input type="radio" id="focimdal_igen" name="focimdal" value="igen">
-                        <label for="focimdal_igen" >Igen</label>
-                    </div>
-                    <div>
-                        <input type="radio"  id="focimdal_nem" name="focimdal" value="nem">
-                        <label for="focimdal_nem">Nem</label>
-                    </div>
+                <div <?php echo (!empty($eloado_hiba)) ? 'Hiba történt!' : ''; ?>>
+                    <label>Előadó neve*</label> <br>
+                    <input type="text" name="eloado" value="<?php echo $eloado; ?>">
+                    <br>
+                    <span class="hiba"><?php echo $eloado_hiba; ?></span>
                 </div>
-                <span class="hiba"><?php echo $focimdal_hiba; ?></span><br>
-            </div>
+                <div <?php echo (!empty($album_hiba)) ? 'Hiba történt!' : ''; ?>>
+                    <label>Album címe*</label> <br>
+                    <input type="text" name="album" value="<?php echo $album; ?>">
+                    <br>
+                    <span class="hiba"><?php echo $album_hiba; ?></span>
+                </div>
+
+                <div <?php echo (!empty($dal_cim_hiba)) ? 'Hiba történt!' : ''; ?>>
+                    <label>Dal címe*</label> <br>
+                    <input type="text" name="dal_cim" value="<?php echo $dal_cim; ?>">
+                    <br>
+                    <span class="hiba"><?php echo $dal_cim_hiba; ?></span>
+                </div>
+
+                <div <?php echo (!empty($focimdal_hiba)) ? 'Hiba történt!' : ''; ?>>
+                    <label>Főcímdal*</label> <br>
+                    <div class="valaszto">
+                        <div>
+                            <input type="radio" id="focimdal_igen" name="focimdal" value="igen">
+                            <label for="focimdal_igen">Igen</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="focimdal_nem" name="focimdal" value="nem">
+                            <label for="focimdal_nem">Nem</label>
+                        </div>
+                    </div>
+                    <span class="hiba"><?php echo $focimdal_hiba; ?></span><br>
+                </div>
 
 
-            <div <?php echo (!empty($yt_hiba)) ? 'Hiba történt!' : ''; ?> >
-                <label>Hivatalos YouTube videó</label>
-                <input type="text"  name="youtube" value="<?php echo $yt; ?>">
-                <span class="hiba"><?php echo $yt_hiba; ?></span>
-            </div>
+                <div <?php echo (!empty($yt_hiba)) ? 'Hiba történt!' : ''; ?>>
+                    <label>Hivatalos YouTube videó</label>
+                    <input type="text" name="youtube" value="<?php echo $yt; ?>">
+                    <span class="hiba"><?php echo $yt_hiba; ?></span>
+                </div>
             </div>
             <div class="cimke2">
-            <div <?php echo (!empty($dalszoveg_hiba)) ? 'Hiba történt!' : ''; ?>>
-                <label>Dal szövege</label> <br>
-                <textarea id="zene_hozzaad_textarea" name="dalszoveg"><?php echo $dalszoveg; ?></textarea>
-                <span class="hiba"><?php echo $dalszoveg_hiba; ?></span>
+                <div <?php echo (!empty($dalszoveg_hiba)) ? 'Hiba történt!' : ''; ?>>
+                    <label>Dal szövege</label> <br>
+                    <textarea id="zene_hozzaad_textarea" name="dalszoveg"><?php echo $dalszoveg; ?></textarea>
+                    <span class="hiba"><?php echo $dalszoveg_hiba; ?></span>
+                </div>
             </div>
-            </div>
-            
+
             <button class="gomb" type="submit" name="zene_hozzaad">Zene hozzáadása</button>
             <p class="vissza_link"><a href="zenek.php">Vissza a zenékhez</a></p>
-            
+
         </form>
     </div>
-    <?php } else{
-    ?>
-    <script>location.href = "http://localhost/forditasokk/kezdolap.php"</script>
-    <?php
+<?php } else {
+?>
+    <script>
+        location.href = "../index.php"
+    </script>
+<?php
 }
 include_once '../altalanos/lablec.php';
 ?>

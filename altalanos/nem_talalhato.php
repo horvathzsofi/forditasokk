@@ -8,7 +8,7 @@ include_once 'fejlec.php';
 
     <h1>Nem található tartalom.</h1>
 
-    <p>Sajnos, a kérésed nem megfelelő!  Lépj a <a href="../kezdolap.php"> Kezdőlapra </a> és próbáld újra!</p>
+    <p>Sajnos, a kérésed nem megfelelő!  Lépj a <a href="../index.php"> Kezdőlapra </a> és próbáld újra!</p>
 
 </div>
  </div>            

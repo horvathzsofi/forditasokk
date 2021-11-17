@@ -3,11 +3,11 @@ require_once '../altalanos/konfig.php';
 include_once '../altalanos/fejlec.php'; //fejléc beszúrása
 if (isset($_SESSION['felhasznalonev'])) {
 
-$id_kiado = '';
-$kiado = $yt = $twt = $face = $insta = "";
-$kiado_hiba = $yt_hiba = $twt_hiba = $face_hiba = $insta_hiba = '';
+    $id_kiado = '';
+    $kiado = $yt = $twt = $face = $insta = "";
+    $kiado_hiba = $yt_hiba = $twt_hiba = $face_hiba = $insta_hiba = '';
 
-if (isset($_GET['ID_kiado']) && !empty(trim($_GET['ID_kiado']))) {
+    if (isset($_GET['ID_kiado']) && !empty(trim($_GET['ID_kiado']))) {
         $id_kiado = htmlspecialchars(trim($_GET['ID_kiado']));
         $kiado_lekerdezes = $adatbazisom->prepare("SELECT * FROM kiadok
                                                 WHERE ID_kiado=?");
@@ -23,9 +23,11 @@ if (isset($_GET['ID_kiado']) && !empty(trim($_GET['ID_kiado']))) {
                 $insta = $adat2['instagram'];
             }
         } else {
-            ?>
-            <script>location.href = "http://localhost/forditasokk/altalanos/nem_talalhato.php"</script>
-            <?php
+?>
+            <script>
+                location.href = "../altalanos/nem_talalhato.php"
+            </script>
+        <?php
         }
         if (isset($_POST['kiado_szerkeszt'])) {
             $bevitt_kiado = htmlspecialchars(trim($_POST["kiado"]));
@@ -100,10 +102,12 @@ if (isset($_GET['ID_kiado']) && !empty(trim($_GET['ID_kiado']))) {
         }
     } else {
         ?>
-        <script>location.href = "http://localhost/forditasokk/altalanos/hiba.php"</script>
-        <?php
+        <script>
+            location.href = "../altalanos/hiba.php"
+        </script>
+    <?php
     }
-    ?> 
+    ?>
     <div class="tartalom">
 
         <div class="focim">
@@ -111,31 +115,31 @@ if (isset($_GET['ID_kiado']) && !empty(trim($_GET['ID_kiado']))) {
         </div>
         <form class="minden_form" method="POST">
 
-            <div <?php echo (!empty($kiado_hiba)) ? 'Hiba történt!' : ''; ?> >
+            <div <?php echo (!empty($kiado_hiba)) ? 'Hiba történt!' : ''; ?>>
                 <label>Kiadó neve*</label><br>
-                <input type="text" id="kiado" name="kiado" required value="<?php echo $kiado_nev; ?>" ><br>
+                <input type="text" id="kiado" name="kiado" required value="<?php echo $kiado_nev; ?>"><br>
                 <span class="hiba"><?php echo $kiado_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($yt_hiba)) ? 'Hiba történt!' : ''; ?> >
+            <div <?php echo (!empty($yt_hiba)) ? 'Hiba történt!' : ''; ?>>
                 <label>Hivatalos YouTube csatorna</label><br>
                 <input type="text" id="youtube" name="youtube" value="<?php echo $yt; ?>"><br>
                 <span class="hiba"><?php echo $yt_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($face_hiba)) ? 'Hiba történt!' : ''; ?> >
+            <div <?php echo (!empty($face_hiba)) ? 'Hiba történt!' : ''; ?>>
                 <label>Hivatalos facebook oldal</label><br>
-                <input type="text" id="facebook" name="facebook"  value="<?php echo $face; ?>"><br>
+                <input type="text" id="facebook" name="facebook" value="<?php echo $face; ?>"><br>
                 <span class="hiba"><?php echo $face_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($twt_hiba)) ? 'Hiba történt!' : ''; ?> >
+            <div <?php echo (!empty($twt_hiba)) ? 'Hiba történt!' : ''; ?>>
                 <label>Hivatalos twitter fiók</label><br>
                 <input type="text" id="twitter" name="twitter" value="<?php echo $twt; ?>"><br>
                 <span class="hiba"><?php echo $twt_hiba; ?></span>
             </div>
 
-            <div <?php echo (!empty($insta_hiba)) ? 'Hiba történt!' : ''; ?> >
+            <div <?php echo (!empty($insta_hiba)) ? 'Hiba történt!' : ''; ?>>
                 <label>Hivatalos Instagram fiók</label><br>
                 <input type="text" id="instagram" name="instagram" value="<?php echo $insta; ?>"><br>
                 <span class="hiba"><?php echo $insta_hiba; ?></span>
@@ -146,11 +150,13 @@ if (isset($_GET['ID_kiado']) && !empty(trim($_GET['ID_kiado']))) {
             <p class="vissza_link"><a href="kiadok.php">Vissza a kiadókhoz</a></p>
         </form>
     </div>
-    <?php
+<?php
 } else {
-    ?>
-    <script>location.href = "http://localhost/forditasokk/kezdolap.php"</script>
-    <?php
+?>
+    <script>
+        location.href = "../index.php"
+    </script>
+<?php
 }
 include_once '../altalanos/lablec.php';
 ?>

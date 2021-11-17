@@ -1,6 +1,6 @@
 <?php
-require_once'../../altalanos/konfig.php';
-include_once '../../altalanos/fejlec.php'; //fejléc beszúrása
+require_once '../altalanos/konfig.php';
+include_once '../altalanos/fejlec.php'; //fejléc beszúrása
 
 if (isset($_SESSION['tipus']) && ($_SESSION['tipus'] == 'Rendszergazda' || $_SESSION['tipus'] == 'Admin')) {
     $id_felhasznalo = $_SESSION['id_felhasznalo'];
@@ -9,8 +9,8 @@ if (isset($_SESSION['tipus']) && ($_SESSION['tipus'] == 'Rendszergazda' || $_SES
     $zene_cime_hiba = "";
     if (isset($_GET['ID_zenek']) && !empty(trim($_GET['ID_zenek'])) && isset($_GET['ID_felhasznalo'])) {
         $id = trim($_GET['ID_zenek']);
-        $id_fordito=trim($_GET['ID_felhasznalo']);
-        $lekerdezes= "SELECT
+        $id_fordito = trim($_GET['ID_felhasznalo']);
+        $lekerdezes = "SELECT
                                     forditasok.*,
                                     felhasznalok.ID_felhasznalo,
                                     felhasznalok.felhasznalonev,
@@ -30,14 +30,14 @@ if (isset($_SESSION['tipus']) && ($_SESSION['tipus'] == 'Rendszergazda' || $_SES
                                       ON forditasok.zene_ID = zeneszamok.ID_zenek
                                     LEFT JOIN felhasznalok
                                       ON forditasok.felhasznalo_ID = felhasznalok.ID_felhasznalo ";
-        if(empty($_GET['ID_felhasznalo'])){
+        if (empty($_GET['ID_felhasznalo'])) {
             $lekerdezes .= " WHERE zeneszamok.ID_zenek = ?;";
-        }else{
+        } else {
             $lekerdezes .= " WHERE zeneszamok.ID_zenek = ? AND felhasznalok.ID_felhasznalo = ?;";
         }
         $utasitas = $adatbazisom->prepare($lekerdezes);
         $utasitas->bindParam(1, $id);
-        if(!empty($_GET['ID_felhasznalo'])) {
+        if (!empty($_GET['ID_felhasznalo'])) {
             $utasitas->bindParam(2, $id_fordito);
         }
 
@@ -55,13 +55,12 @@ if (isset($_SESSION['tipus']) && ($_SESSION['tipus'] == 'Rendszergazda' || $_SES
                 $eloado = $adatsor['eloado_neve'];
                 $album = $adatsor['album_cime'];
                 $borito = $adatsor['borito'];
-                
-                $felhasznalo=$adatsor['felhasznalonev'];
+
+                $felhasznalo = $adatsor['felhasznalonev'];
             }
-        } 
-      
+        }
     } else {
-        header("location: ../../altalanos/hiba.php");
+        header("location: ../altalanos/hiba.php");
     }
     unset($eredmeny);
 
@@ -91,7 +90,8 @@ if (isset($_SESSION['tipus']) && ($_SESSION['tipus'] == 'Rendszergazda' || $_SES
             $utasitas->bindParam(':id', $id);
 
             $utasitas->execute();
-        }unset($utasitas);
+        }
+        unset($utasitas);
 
         if (isset($bevitt_forditott_cim)) {
             if ($forditott_cim == null) {
@@ -120,60 +120,62 @@ if (isset($_SESSION['tipus']) && ($_SESSION['tipus'] == 'Rendszergazda' || $_SES
     unset($adatbazisom);
 
 ?>
-<div class='tartalom'>
-    <div class="focim">
-<h2>Zene adatainak módosítása</h2>
-</div>
-    <div class='szerkeszt_kartya'>
-        <div class="uj_kartya">
-            <?php
-            echo "<img class='kep' src='../../".$borito."'>";
-            echo "<div></div><div>".$eloado."</div>";
-            echo "<div>".$album."</div><div></div>";
-            ?>
+    <div class='tartalom'>
+        <div class="focim">
+            <h2>Zene adatainak módosítása</h2>
         </div>
-      
+        <div class='szerkeszt_kartya'>
+            <div class="uj_kartya">
+                <?php
+                echo "<img class='kep' src='../" . $borito . "'>";
+                echo "<div></div><div>" . $eloado . "</div>";
+                echo "<div>" . $album . "</div><div></div>";
+                ?>
+            </div>
+
+        </div>
+
+        <form method="POST" class="zene_ford_szerkeszt">
+            <div class="dalszovegek">
+                <div class="zeneszoveg">
+                    <div>
+                        <label> Zene címe</label><br>
+                        <input type="text" name="zene_cime" value="<?php echo $zene_cime; ?>">
+                    </div>
+                    <div>
+                        <label> Dalszöveg </label><br>
+                        <textarea name="dalszoveg"><?php echo $dalszoveg; ?></textarea>
+                    </div>
+                    <div>
+                        <label> YouTube link </label><br>
+                        <input type="text" name="youtube_link" value="<?php echo $youtube_link; ?>" pattern="^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$">
+                    </div>
+                    <input type="hidden" name="id" value="<?php echo $id; ?>" />
+                </div>
+
+                <div class="forditas">
+                    <div>
+                        <label> Dal fordított címe</label><br>
+                        <input type="text" name="forditott_cim" value="<?php echo $forditott_cim; ?>">
+                    </div>
+                    <div>
+                        <label> Fordított dalszöveg </label><br>
+                        <textarea name="forditott_szoveg"><?php echo $forditott_szoveg; ?></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <button class="gomb" id="zene_szerkeszt_gomb" type="submit" name="frissit">Adatok frissítése</button>
+        </form>
+
     </div>
-    
-    <form method="POST" class="zene_ford_szerkeszt">
-        <div  class="dalszovegek">
-        <div class="zeneszoveg">
-            <div>
-                <label> Zene címe</label><br>
-                <input type="text" name="zene_cime" value="<?php echo $zene_cime; ?>">
-            </div>
-            <div>
-                <label> Dalszöveg </label><br>
-                <textarea name="dalszoveg"><?php echo $dalszoveg; ?></textarea>
-            </div>
-            <div>
-                <label> YouTube link </label><br>
-                <input type="text" name="youtube_link" value="<?php echo $youtube_link; ?>" pattern="^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$">
-            </div>
-            <input type="hidden" name="id" value="<?php echo $id; ?>"/>
-        </div>
-        
-        <div class="forditas">
-            <div>
-                <label> Dal fordított címe</label><br>
-                <input type="text" name="forditott_cim" value="<?php echo $forditott_cim; ?>">
-            </div>
-            <div>
-                <label> Fordított dalszöveg </label><br>
-                <textarea name="forditott_szoveg"><?php echo $forditott_szoveg; ?></textarea>
-            </div>
-        </div>
-        </div>
-
-        <button class="gomb" id="zene_szerkeszt_gomb" type="submit" name="frissit">Adatok frissítése</button>
-    </form>
-
-</div>
 <?php
-} else{
+} else {
 ?>
-    <script>location.href="http://localhost/forditasokk/kezdolap.php"</script>
+    <script>
+        location.href = "../index.php"
+    </script>
 <?php
 }
-include_once '../../altalanos/lablec.php';
+include_once '../altalanos/lablec.php';
 ?>

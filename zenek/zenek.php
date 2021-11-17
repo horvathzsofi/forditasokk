@@ -1,5 +1,5 @@
 <?php
-require_once'../altalanos/konfig.php';  // konfig.php tartalmának beszúrása
+require_once '../altalanos/konfig.php';  // konfig.php tartalmának beszúrása
 include_once '../altalanos/fejlec.php'; //fejléc beszúrása
 //include_once '../altalanos/menu.php'; //navigációs sáv beszúrása
 ?>
@@ -7,12 +7,12 @@ include_once '../altalanos/fejlec.php'; //fejléc beszúrása
 <div class="tartalom">
     <div class="focim">
         <h2>Zenék</h2>
-    </div>        
-            <?php if(isset($_SESSION['felhasznalonev'])){ ?>
-    <a href="zene_hozzaad.php" class="muvelet">Zene hozzáadása</a>
-            <?php }?>
+    </div>
+    <?php if (isset($_SESSION['felhasznalonev'])) { ?>
+        <a href="zene_hozzaad.php" class="muvelet">Zene hozzáadása</a>
+    <?php } ?>
 
-        <div class="kartyak">
+    <div class="kartyak">
         <?php
         try {
             // A lekérdezés futtatása és adataink megjelenítése, ha vannak 
@@ -34,26 +34,26 @@ include_once '../altalanos/fejlec.php'; //fejléc beszúrása
                                               ORDER BY zeneszamok.zene_cim, eloadok.eloado_neve");
 
             $eredmeny = $utasitas->fetchAll(PDO::FETCH_ASSOC);
-			
+
             if (count($eredmeny) > 0) {
                 foreach ($eredmeny as $adat) {
-                        echo "<div class='kartya'><a href='http://localhost/forditasokk/zenek/megtekint.php?ID_zenek=" . $adat['ID_zenek'] . "' title='Zene megtekintése'>";
-                            echo "<img class='kep' src=../" . $adat['borito'] . ">";
-                            echo"<div class='kartya_cim'>";
-                                echo $adat['zene_cim'];
-                            echo"</div>";
-                            echo "<div class='kartya_leiras'>";
-                                echo "<div class='kartya_alcim'>";
-                                   echo $adat['eloado_neve'];
-                                   
-                                echo"</div>";   
-                                echo "<div class='ev'>";
-                                        echo $adat['megjelenes'];
-                                echo"</div>";   
-                                
-                                  
-                            echo "</div>";
-                        echo"</a></div>";
+                    echo "<div class='kartya'><a href='megtekint.php?ID_zenek=" . $adat['ID_zenek'] . "' title='Zene megtekintése'>";
+                    echo "<img class='kep' src=../" . $adat['borito'] . ">";
+                    echo "<div class='kartya_cim'>";
+                    echo $adat['zene_cim'];
+                    echo "</div>";
+                    echo "<div class='kartya_leiras'>";
+                    echo "<div class='kartya_alcim'>";
+                    echo $adat['eloado_neve'];
+
+                    echo "</div>";
+                    echo "<div class='ev'>";
+                    echo $adat['megjelenes'];
+                    echo "</div>";
+
+
+                    echo "</div>";
+                    echo "</a></div>";
                 }
                 // Az eredmény halmaz felszabadítása
                 unset($eredmeny);
@@ -64,9 +64,9 @@ include_once '../altalanos/fejlec.php'; //fejléc beszúrása
             echo $exc->getMessage();
         }
         ?>
-              
+
     </div>
-    </div>
+</div>
 <?php
 include_once '../altalanos/lablec.php';
 ?>

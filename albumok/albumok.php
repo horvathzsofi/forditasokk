@@ -1,14 +1,14 @@
 <?php
-require_once'../altalanos/konfig.php';  // konfig.php tartalmának beszúrása
+require_once '../altalanos/konfig.php';  // konfig.php tartalmának beszúrása
 include_once '../altalanos/fejlec.php'; //fejléc beszúrása
 ?>
 <div class="tartalom">
- <div class="focim">
-    <h2>Albumok</h2>
- </div>       
-<?php if (isset($_SESSION['felhasznalonev'])) { ?>
-    <a href="album_hozzaad.php" class="muvelet">Album hozzáadása</a>
-<?php } ?>
+    <div class="focim">
+        <h2>Albumok</h2>
+    </div>
+    <?php if (isset($_SESSION['felhasznalonev'])) { ?>
+        <a href="album_hozzaad.php" class="muvelet">Album hozzáadása</a>
+    <?php } ?>
     <div class="kartyak">
         <?php
         try {
@@ -34,18 +34,18 @@ include_once '../altalanos/fejlec.php'; //fejléc beszúrása
                 foreach ($eredmeny as $adat) {
                     echo "<div class='kartya'><a href='megtekint.php?ID_album=" . $adat['ID_album'] . "' title='Album megtekintése'>";
                     echo "<img class='kep' src=../" . $adat['borito'] . ">";
-                    echo"<div class='kartya_cim'>";
+                    echo "<div class='kartya_cim'>";
                     echo $adat['album_cime'];
-                    echo"</div>";
+                    echo "</div>";
                     echo "<div class='kartya_leiras'>";
                     echo "<div class='kartya_alcim'>";
                     echo $adat['eloado_neve'];
-                    echo"</div>";
-                    echo "<div class='ev'>";
-                        echo $adat['megjelenes'];
-                    echo"</div>";
                     echo "</div>";
-                    echo"</a></div>";
+                    echo "<div class='ev'>";
+                    echo $adat['megjelenes'];
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</a></div>";
                 }
                 // Az eredmény halmaz felszabadítása
                 unset($eredmeny);
@@ -53,14 +53,14 @@ include_once '../altalanos/fejlec.php'; //fejléc beszúrása
             }
             // Adatbázis kapcsolat bezárása
             unset($adatbazisom);
-       } catch (Exception $exc) {
-        echo $exc->getMessage();
-    }
+        } catch (Exception $exc) {
+            echo $exc->getMessage();
+        }
         ?>
-    </div>              
-    </div>              
+    </div>
+</div>
 
-    <?php
-    
-    include_once '../altalanos/lablec.php';
-    ?>
+<?php
+
+include_once '../altalanos/lablec.php';
+?>
